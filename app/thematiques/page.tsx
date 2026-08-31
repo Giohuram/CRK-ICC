@@ -8,6 +8,8 @@ export const metadata = {
   title: "Thématiques — CRK-ICC",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ThemesPage() {
   const themes = await getThemes();
 

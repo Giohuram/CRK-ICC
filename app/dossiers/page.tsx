@@ -8,6 +8,8 @@ export const metadata = {
   title: "Dossiers thématiques — CRK-ICC",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function DossiersPage() {
   const dossiers = await getDossiers();
 

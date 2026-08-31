@@ -23,6 +23,8 @@ import {
   PlusCircle,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const [stats, themes, resources, contributors, activities] = await Promise.all([
     getStats(),

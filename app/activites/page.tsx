@@ -7,6 +7,8 @@ export const metadata = {
   title: "Activités du Centre — CRK-ICC",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ActivitiesPage() {
   const activities = await getActivities();
 

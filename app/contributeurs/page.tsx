@@ -7,6 +7,8 @@ export const metadata = {
   title: "Contributeurs — CRK-ICC",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ContributorsPage() {
   const contributors = await getContributors();
 
