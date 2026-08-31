@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Theme {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  color       String?
+  icon        String?
+  resources   ResourceTheme[]
+}
+
+model Keyword {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  resources Resource[]
+}
+
+model Contributor {
+  id          String     @id @default(cuid())
+  name        String
+  title       String?
+  institution String?
+  function    String?
+  expertise   String?
+  bio         String?    @db.Text
+  photoUrl    String?
+  resources   Resource[]
+}
+
+model Resource {
+  id                String         @id @default(cuid())
+  title             String
+  authors           String
+  year              Int?
+  type              String
+  publisher         String?
+  country           String?
+  language          String?
+  abstract          String?        @db.Text
+  fullReference     String?        @db.Text
+  externalLink      String?
+  isAvailable       Boolean        @default(false)
+  availableDocument String?
+  contributorId     String?
+  contributor       Contributor?   @relation(fields: [contributorId], references: [id])
+  status            String         @default("PUBLISHED")
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  themes            ResourceTheme[]
+  keywords          Keyword[]
+  dossiers          DossierResource[]
+}
+
+model ResourceTheme {
+  resourceId String
+  themeId    String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  theme      Theme    @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, themeId])
+}
+
+model Dossier {
+  id          String            @id @default(cuid())
+  title       String
+  slug        String            @unique
+  description String?           @db.Text
+  coverUrl    String?
+  resources   DossierResource[]
+}
+
+model DossierResource {
+  dossierId  String
+  resourceId String
+  dossier    Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@id([dossierId, resourceId])
+}
+
+model Activity {
+  id          String    @id @default(cuid())
+  title       String
+  date        DateTime
+  endDate     DateTime?
+  type        String
+  description String?   @db.Text
+  visualUrl   String?
+  partners    String?
+  report      String?   @db.Text
+  isOnline    Boolean   @default(false)
+  location    String?
+}
+
+model ProposedResource {
+  id                     String   @id @default(cuid())
+  contributorName        String
+  contributorInstitution String?
+  email                  String
+  resourceTitle          String
+  author                 String?
+  year                   String?
+  type                   String
+  reference              String?
+  theme                  String?
+  justification          String?  @db.Text
+  attachmentUrl          String?
+  status                 String   @default("SUBMITTED")
+  createdAt              DateTime @default(now())
+}
